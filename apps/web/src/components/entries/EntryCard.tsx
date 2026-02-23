@@ -35,7 +35,7 @@ export function EntryCard({ entry }: EntryCardProps) {
               {entry.title}
             </h3>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 line-clamp-2 transition-colors">
-              {truncateText(entry.plainText, 150)}
+              {truncateText(entry.content, 150)}
             </p>
           </div>
           <time className="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap transition-colors">

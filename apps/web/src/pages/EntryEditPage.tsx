@@ -25,8 +25,7 @@ export function EntryEditPage() {
   const isNew = id === 'new';
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState<Record<string, unknown>>({});
-  const [plainText, setPlainText] = useState('');
+  const [content, setContent] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [includeInSafetyTimer, setIncludeInSafetyTimer] = useState(true);
@@ -48,16 +47,14 @@ export function EntryEditPage() {
     if (currentEntry && !isNew) {
       setTitle(currentEntry.title);
       setContent(currentEntry.content);
-      setPlainText(currentEntry.plainText);
       setTags(currentEntry.tags);
       setIncludeInSafetyTimer(currentEntry.includeInSafetyTimer);
     }
   }, [currentEntry, isNew]);
 
   const handleEditorChange = useCallback(
-    (newContent: Record<string, unknown>, newPlainText: string) => {
+    (newContent: string) => {
       setContent(newContent);
-      setPlainText(newPlainText);
     },
     []
   );
@@ -83,7 +80,6 @@ export function EntryEditPage() {
         const entry = await createEntry({
           title: title.trim(),
           content,
-          plainText,
           tags,
           includeInSafetyTimer,
         });
@@ -92,7 +88,6 @@ export function EntryEditPage() {
         await updateEntry(id, {
           title: title.trim(),
           content,
-          plainText,
           tags,
           includeInSafetyTimer,
         });
@@ -157,12 +152,15 @@ export function EntryEditPage() {
           className="text-xl font-semibold"
         />
 
-        <Editor
-          initialContent={isNew ? undefined : content}
-          onChange={handleEditorChange}
-          placeholder={t('entries.contentPlaceholder')}
-          fontSize={preferences.editorFontSize}
-        />
+        {(isNew || currentEntry) && (
+          <Editor
+            key={id}
+            initialContent={isNew ? undefined : currentEntry?.content}
+            onChange={handleEditorChange}
+            placeholder={t('entries.contentPlaceholder')}
+            fontSize={preferences.editorFontSize}
+          />
+        )}
 
         <div className="space-y-2">
           <label className="label">{t('entries.tags')}</label>

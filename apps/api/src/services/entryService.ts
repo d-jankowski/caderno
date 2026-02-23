@@ -12,8 +12,7 @@ import type {
 export interface EntryResponse {
   id: string;
   title: string;
-  content: Record<string, unknown>;
-  plainText: string;
+  content: string;
   tags: string[];
   includeInSafetyTimer: boolean;
   createdAt: Date;
@@ -26,7 +25,6 @@ function toEntryResponse(entry: IEntry): EntryResponse {
     id: entry._id.toString(),
     title: entry.title,
     content: entry.content,
-    plainText: entry.plainText,
     tags: entry.tags,
     includeInSafetyTimer: entry.includeInSafetyTimer,
     createdAt: entry.createdAt,
@@ -43,7 +41,6 @@ export async function createEntry(
     userId,
     title: input.title,
     content: input.content,
-    plainText: input.plainText,
     tags: input.tags || [],
     includeInSafetyTimer: input.includeInSafetyTimer ?? true,
   });
@@ -109,13 +106,13 @@ export async function listEntries(
     query.deletedAt = null;
   }
 
-  // Search filter - searches in title, plainText, and tags using regex
+  // Search filter - searches in title, content, and tags using regex
   if (filter.search) {
     const searchTerm = filter.search.trim();
     const searchRegex = { $regex: searchTerm, $options: 'i' };
     query.$or = [
       { title: searchRegex },
-      { plainText: searchRegex },
+      { content: searchRegex },
       { tags: searchRegex },
     ];
   }

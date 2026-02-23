@@ -440,8 +440,7 @@ interface Passkey {
 interface Entry {
   id: string;
   title: string;
-  content: Record<string, unknown>;
-  plainText: string;
+  content: string;
   tags: string[];
   includeInSafetyTimer: boolean;
   createdAt: string;
@@ -451,16 +450,14 @@ interface Entry {
 
 interface CreateEntryInput {
   title: string;
-  content: Record<string, unknown>;
-  plainText: string;
+  content: string;
   tags?: string[];
   includeInSafetyTimer?: boolean;
 }
 
 interface UpdateEntryInput {
   title?: string;
-  content?: Record<string, unknown>;
-  plainText?: string;
+  content?: string;
   tags?: string[];
   includeInSafetyTimer?: boolean;
 }

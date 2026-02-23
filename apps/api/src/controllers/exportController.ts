@@ -25,7 +25,6 @@ export async function exportJson(
       entries: entries.map((e) => ({
         title: e.title,
         content: e.content,
-        plainText: e.plainText,
         tags: e.tags,
         includeInSafetyTimer: e.includeInSafetyTimer,
         createdAt: e.createdAt,
@@ -105,10 +104,10 @@ export async function importJson(
 
       try {
         // Validate required fields
-        if (!entry.title || !entry.content || !entry.plainText) {
+        if (!entry.title || !entry.content) {
           results.errors.push({
             index: i,
-            error: 'Missing required fields (title, content, or plainText)',
+            error: 'Missing required fields (title, content)',
           });
           results.skipped++;
           continue;
@@ -118,7 +117,6 @@ export async function importJson(
           userId: req.userId,
           title: entry.title,
           content: entry.content,
-          plainText: entry.plainText,
           tags: entry.tags || [],
           includeInSafetyTimer: entry.includeInSafetyTimer ?? true,
           createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(),

@@ -74,7 +74,7 @@ export function generateJournalPdf(
       doc.fontSize(12).font('Helvetica').fillColor('#000000');
 
       // Split content into paragraphs and handle long text
-      const paragraphs = entry.plainText.split('\n\n');
+      const paragraphs = entry.content.split('\n\n');
       paragraphs.forEach((paragraph, pIndex) => {
         if (paragraph.trim()) {
           doc.text(paragraph.trim(), {
