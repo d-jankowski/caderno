@@ -62,7 +62,12 @@
     "sortDesc": "Newest first",
     "sortAsc": "Oldest first",
     "deleteConfirm": "Delete this entry?",
-    "deleteWarning": "This action cannot be undone. The entry will be moved to trash."
+    "deleteWarning": "This action cannot be undone. The entry will be moved to trash.",
+    "setLocation": "Set Location",
+    "locationName": "Location name",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationSet": "Location set"
   },
   "safetyTimer": {
     "title": "Safety Timer",

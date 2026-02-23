@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useEntriesStore, useSettingsStore } from '../stores';
-import { Editor } from '../components/entries';
+import { Editor, LocationPicker } from '../components/entries';
 import { Button, Input, Alert } from '../components/ui';
 import { api } from '../lib/api';
 
@@ -32,6 +32,10 @@ export function EntryEditPage() {
   const [includeInSafetyTimer, setIncludeInSafetyTimer] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [location, setLocation] = useState<{
+    latitude: number; longitude: number; locationName: string;
+  } | null>(null);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
 
   // Tracks images queued locally (blob URL → File) — uploaded on save, never before
   const pendingUploads = useRef<Map<string, File>>(new Map());
@@ -62,6 +66,13 @@ export function EntryEditPage() {
       setContent(currentEntry.content);
       setTags(currentEntry.tags);
       setIncludeInSafetyTimer(currentEntry.includeInSafetyTimer);
+      if (currentEntry.locationLatitude != null && currentEntry.locationLongitude != null) {
+        setLocation({
+          latitude: currentEntry.locationLatitude,
+          longitude: currentEntry.locationLongitude,
+          locationName: currentEntry.locationName ?? '',
+        });
+      }
     }
   }, [currentEntry, isNew]);
 
@@ -118,6 +129,9 @@ export function EntryEditPage() {
           content: content,
           tags,
           includeInSafetyTimer,
+          locationLatitude: location?.latitude,
+          locationLongitude: location?.longitude,
+          locationName: location?.locationName,
         });
         const finalContent = await uploadPendingImages(entry.id, content);
         await updateEntry(entry.id, {
@@ -125,6 +139,9 @@ export function EntryEditPage() {
           content: finalContent,
           tags,
           includeInSafetyTimer,
+          locationLatitude: location?.latitude,
+          locationLongitude: location?.longitude,
+          locationName: location?.locationName,
         });
         navigate(`/entries/${entry.id}`, { replace: true });
       } else if (id) {
@@ -134,6 +151,9 @@ export function EntryEditPage() {
           content: finalContent,
           tags,
           includeInSafetyTimer,
+          locationLatitude: location?.latitude,
+          locationLongitude: location?.longitude,
+          locationName: location?.locationName,
         });
       }
     } catch {
@@ -204,7 +224,29 @@ export function EntryEditPage() {
             placeholder={t('entries.contentPlaceholder')}
             fontSize={preferences.editorFontSize}
             onImageQueued={handleImageQueued}
+            onLocationClick={() => setShowLocationPicker(true)}
           />
+        )}
+
+        {location && (
+          <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 transition-colors">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span>
+              {location.locationName || `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`}
+            </span>
+            <button
+              onClick={() => setLocation(null)}
+              className="ml-1 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              aria-label="Remove location"
+            >
+              &times;
+            </button>
+          </div>
         )}
 
         <div className="space-y-2">
@@ -256,6 +298,14 @@ export function EntryEditPage() {
           </span>
         </label>
       </div>
+
+      {showLocationPicker && (
+        <LocationPicker
+          initialLocation={location ?? undefined}
+          onSave={(loc) => { setLocation(loc); setShowLocationPicker(false); }}
+          onCancel={() => setShowLocationPicker(false)}
+        />
+      )}
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (

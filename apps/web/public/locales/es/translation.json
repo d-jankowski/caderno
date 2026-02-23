@@ -62,7 +62,12 @@
     "sortDesc": "Más recientes primero",
     "sortAsc": "Más antiguas primero",
     "deleteConfirm": "¿Eliminar esta entrada?",
-    "deleteWarning": "Esta acción no se puede deshacer. La entrada se moverá a la papelera."
+    "deleteWarning": "Esta acción no se puede deshacer. La entrada se moverá a la papelera.",
+    "setLocation": "Establecer Ubicación",
+    "locationName": "Nombre del lugar",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "locationSet": "Ubicación establecida"
   },
   "safetyTimer": {
     "title": "Temporizador de Seguridad",

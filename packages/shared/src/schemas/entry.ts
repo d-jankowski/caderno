@@ -23,6 +23,9 @@ export const EntrySchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().optional(),
+  locationLatitude: z.number().optional(),
+  locationLongitude: z.number().optional(),
+  locationName: z.string().max(200).optional(),
 });
 
 export const CreateEntrySchema = z.object({
@@ -30,6 +33,9 @@ export const CreateEntrySchema = z.object({
   content: z.string(),
   tags: z.array(z.string().max(50)).max(20).optional(),
   includeInSafetyTimer: z.boolean().optional(),
+  locationLatitude: z.number().optional(),
+  locationLongitude: z.number().optional(),
+  locationName: z.string().max(200).optional(),
 });
 
 export const UpdateEntrySchema = z.object({
@@ -37,6 +43,9 @@ export const UpdateEntrySchema = z.object({
   content: z.string(),
   tags: z.array(z.string().max(50)).max(20).optional(),
   includeInSafetyTimer: z.boolean().optional(),
+  locationLatitude: z.number().optional(),
+  locationLongitude: z.number().optional(),
+  locationName: z.string().max(200).optional(),
 });
 
 export const EntryFilterSchema = z.object({

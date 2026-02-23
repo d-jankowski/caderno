@@ -481,6 +481,9 @@ interface Entry {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  locationLatitude?: number;
+  locationLongitude?: number;
+  locationName?: string;
 }
 
 interface CreateEntryInput {
@@ -488,6 +491,9 @@ interface CreateEntryInput {
   content: string;
   tags?: string[];
   includeInSafetyTimer?: boolean;
+  locationLatitude?: number;
+  locationLongitude?: number;
+  locationName?: string;
 }
 
 interface UpdateEntryInput {
@@ -495,6 +501,9 @@ interface UpdateEntryInput {
   content?: string;
   tags?: string[];
   includeInSafetyTimer?: boolean;
+  locationLatitude?: number;
+  locationLongitude?: number;
+  locationName?: string;
 }
 
 interface PaginatedResponse<T> {

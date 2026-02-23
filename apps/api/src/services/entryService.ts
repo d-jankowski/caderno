@@ -19,6 +19,9 @@ export interface EntryResponse {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  locationLatitude?: number;
+  locationLongitude?: number;
+  locationName?: string;
 }
 
 function toEntryResponse(entry: IEntry): EntryResponse {
@@ -31,6 +34,9 @@ function toEntryResponse(entry: IEntry): EntryResponse {
     createdAt: entry.createdAt,
     updatedAt: entry.updatedAt,
     deletedAt: entry.deletedAt,
+    locationLatitude: entry.locationLatitude,
+    locationLongitude: entry.locationLongitude,
+    locationName: entry.locationName,
   };
 }
 

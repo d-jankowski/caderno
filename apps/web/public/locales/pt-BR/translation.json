@@ -62,7 +62,12 @@
     "sortDesc": "Mais recentes primeiro",
     "sortAsc": "Mais antigas primeiro",
     "deleteConfirm": "Excluir esta entrada?",
-    "deleteWarning": "Esta ação não pode ser desfeita. A entrada será movida para a lixeira."
+    "deleteWarning": "Esta ação não pode ser desfeita. A entrada será movida para a lixeira.",
+    "setLocation": "Definir Localização",
+    "locationName": "Nome do local",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationSet": "Localização definida"
   },
   "safetyTimer": {
     "title": "Timer de Segurança",

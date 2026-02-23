@@ -10,6 +10,9 @@ export interface IEntry extends Document {
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
+    locationLatitude?: number;
+    locationLongitude?: number;
+    locationName?: string;
 }
 
 const EntrySchema = new Schema<IEntry>(
@@ -20,6 +23,9 @@ const EntrySchema = new Schema<IEntry>(
         tags: [{type: String, maxlength: 50}],
         includeInSafetyTimer: {type: Boolean, default: true},
         deletedAt: {type: Date},
+        locationLatitude: {type: Number},
+        locationLongitude: {type: Number},
+        locationName: {type: String, maxlength: 200},
     },
     {
         timestamps: true,

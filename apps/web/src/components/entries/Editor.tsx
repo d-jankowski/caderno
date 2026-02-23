@@ -26,6 +26,7 @@ interface EditorProps {
     placeholder?: string;
     fontSize?: number;
     onImageQueued?: (blobUrl: string, file: File) => void;
+    onLocationClick?: () => void;
 }
 
 const theme = {
@@ -95,7 +96,7 @@ function Placeholder({text}: { text: string }) {
 }
 
 // Toolbar plugin
-function ToolbarPlugin({onImageQueued}: {onImageQueued?: (blobUrl: string, file: File) => void}) {
+function ToolbarPlugin({onImageQueued, onLocationClick}: {onImageQueued?: (blobUrl: string, file: File) => void; onLocationClick?: () => void}) {
     const [editor] = useLexicalComposerContext();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -133,6 +134,19 @@ function ToolbarPlugin({onImageQueued}: {onImageQueued?: (blobUrl: string, file:
                 className="hidden"
                 onChange={handleImageUpload}
             />
+            <button
+                type="button"
+                onClick={() => onLocationClick?.()}
+                title="Set Location"
+                className="p-1.5 rounded transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+            >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+            </button>
         </div>
     );
 }
@@ -143,6 +157,7 @@ export function Editor({
                            placeholder = 'Start writing...',
                            fontSize = 16,
                            onImageQueued,
+                           onLocationClick,
                        }: EditorProps) {
     const initialConfig = {
         namespace: 'CadernoEditor',
@@ -182,7 +197,7 @@ export function Editor({
         <LexicalComposer initialConfig={initialConfig}>
             <div
                 className="editor-container relative rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 transition-colors">
-                <ToolbarPlugin onImageQueued={onImageQueued}/>
+                <ToolbarPlugin onImageQueued={onImageQueued} onLocationClick={onLocationClick}/>
                 <RichTextPlugin
                     contentEditable={
                         <ContentEditable
