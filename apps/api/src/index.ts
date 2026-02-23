@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import fs from 'fs';
 import { env } from './config/env.js';
 import { connectDatabase, disconnectDatabase } from './config/database.js';
 import { generalRateLimiter, errorHandler, notFoundHandler } from './middleware/index.js';
@@ -48,6 +49,8 @@ process.on('SIGINT', shutdown);
 // Start server
 async function start(): Promise<void> {
   try {
+    fs.mkdirSync(env.UPLOADS_DIR, {recursive: true});
+
     await connectDatabase();
     await runMigrations();
     await initializeAgenda();

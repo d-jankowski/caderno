@@ -75,6 +75,9 @@ export const env = {
   SMTP_FROM_ADDRESS: process.env.SMTP_FROM_ADDRESS || '',
   SMTP_FROM_NAME: process.env.SMTP_FROM_NAME || 'Caderno',
 
+  // File uploads
+  UPLOADS_DIR: process.env.UPLOADS_DIR || './data/uploads',
+
   // Rate limiting
   RATE_LIMIT_WINDOW_MS: 15 * 60 * 1000, // 15 minutes
   RATE_LIMIT_MAX_REQUESTS: 100,

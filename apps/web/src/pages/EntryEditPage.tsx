@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useEntriesStore, useSettingsStore } from '../stores';
 import { Editor } from '../components/entries';
 import { Button, Input, Alert } from '../components/ui';
+import { api } from '../lib/api';
 
 export function EntryEditPage() {
   const { t } = useTranslation();
@@ -32,6 +33,18 @@ export function EntryEditPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  // Tracks images queued locally (blob URL → File) — uploaded on save, never before
+  const pendingUploads = useRef<Map<string, File>>(new Map());
+
+  // Revoke any unreleased blob URLs when the page unmounts
+  useEffect(() => {
+    return () => {
+      for (const blobUrl of pendingUploads.current.keys()) {
+        URL.revokeObjectURL(blobUrl);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (!isNew && id) {
       fetchEntry(id);
@@ -59,6 +72,28 @@ export function EntryEditPage() {
     []
   );
 
+  const handleImageQueued = useCallback((blobUrl: string, file: File) => {
+    pendingUploads.current.set(blobUrl, file);
+  }, []);
+
+  // Upload all pending images for entryId, returns content with blob URLs swapped for real URLs.
+  // Images removed from the editor before saving are skipped (blob URL not in content).
+  const uploadPendingImages = useCallback(async (entryId: string, rawContent: string): Promise<string> => {
+    if (pendingUploads.current.size === 0) return rawContent;
+    let resolved = rawContent;
+    for (const [blobUrl, file] of Array.from(pendingUploads.current.entries())) {
+      if (!rawContent.includes(blobUrl)) {
+        URL.revokeObjectURL(blobUrl);
+        continue;
+      }
+      const result = await api.uploadImage(entryId, file);
+      resolved = resolved.replaceAll(blobUrl, result.url);
+      URL.revokeObjectURL(blobUrl);
+    }
+    pendingUploads.current.clear();
+    return resolved;
+  }, []);
+
   const handleAddTag = () => {
     const tag = tagInput.trim().toLowerCase();
     if (tag && !tags.includes(tag) && tags.length < 20) {
@@ -77,17 +112,26 @@ export function EntryEditPage() {
     setIsSaving(true);
     try {
       if (isNew) {
+        // Create with empty content first — we need the ID to upload images
         const entry = await createEntry({
           title: title.trim(),
-          content,
+          content: content,
+          tags,
+          includeInSafetyTimer,
+        });
+        const finalContent = await uploadPendingImages(entry.id, content);
+        await updateEntry(entry.id, {
+          title: title.trim(),
+          content: finalContent,
           tags,
           includeInSafetyTimer,
         });
         navigate(`/entries/${entry.id}`, { replace: true });
       } else if (id) {
+        const finalContent = await uploadPendingImages(id, content);
         await updateEntry(id, {
           title: title.trim(),
-          content,
+          content: finalContent,
           tags,
           includeInSafetyTimer,
         });
@@ -159,6 +203,7 @@ export function EntryEditPage() {
             onChange={handleEditorChange}
             placeholder={t('entries.contentPlaceholder')}
             fontSize={preferences.editorFontSize}
+            onImageQueued={handleImageQueued}
           />
         )}
 

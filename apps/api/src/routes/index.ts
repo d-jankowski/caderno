@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './auth.js';
 import entriesRoutes from './entries.js';
+import imageRoutes from './images.js';
 import exportRoutes from './export.js';
 import safetyTimerRoutes from './safetyTimer.js';
 import settingsRoutes from './settings.js';
@@ -9,6 +10,7 @@ const router = Router();
 
 router.use('/auth', authRoutes);
 router.use('/entries', entriesRoutes);
+router.use('/entries/:entryId/images', imageRoutes);
 router.use('/export', exportRoutes);
 router.use('/import', exportRoutes); // Import uses same controller
 router.use('/safety-timer', safetyTimerRoutes);

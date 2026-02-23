@@ -255,6 +255,41 @@ class ApiClient {
     return this.request<{ tags: string[] }>('/entries/tags');
   }
 
+  async uploadImage(entryId: string, file: File): Promise<ImageUploadResponse> {
+    const formData = new FormData();
+    formData.append('image', file);
+    const response = await fetch(`${API_BASE}/entries/${entryId}/images`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+      body: formData,
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error?.message || 'Failed to upload image');
+    }
+    return response.json();
+  }
+
+  async deleteImage(entryId: string, imageId: string): Promise<void> {
+    return this.request(`/entries/${entryId}/images/${imageId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async fetchImageBlob(url: string): Promise<Blob> {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+      credentials: 'include',
+    });
+    if (!response.ok) throw new Error('Failed to fetch image');
+    return response.blob();
+  }
+
   // Export/Import
   async exportJson(params: Record<string, string> = {}) {
     const query = new URLSearchParams(params).toString();
@@ -547,6 +582,18 @@ interface OnboardingStatus {
   hasSmtp: boolean;
 }
 
+interface ImageUploadResponse {
+  id: string;
+  entryId: string;
+  filename: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  url: string;
+  markdown: string;
+  createdAt: string;
+}
+
 export const api = new ApiClient();
 export type {
   User,
@@ -565,4 +612,5 @@ export type {
   SmtpConfig,
   SmtpSettingsResponse,
   OnboardingStatus,
+  ImageUploadResponse,
 };

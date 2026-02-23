@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import multer from 'multer';
 import { env } from '../config/env.js';
 
 export class AppError extends Error {
@@ -30,6 +31,19 @@ export function errorHandler(
   _next: NextFunction
 ): void {
   console.error('Error:', err);
+
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      res.status(413).json({
+        error: {code: 'FILE_TOO_LARGE', message: 'File exceeds 20MB limit'},
+      });
+      return;
+    }
+    res.status(400).json({
+      error: {code: 'UPLOAD_ERROR', message: err.message},
+    });
+    return;
+  }
 
   if (err instanceof AppError) {
     res.status(err.statusCode).json({

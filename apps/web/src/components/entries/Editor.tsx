@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
 import {ContentEditable} from '@lexical/react/LexicalContentEditable';
@@ -15,14 +15,19 @@ import {AutoLinkNode, LinkNode} from '@lexical/link';
 import {CodeHighlightNode, CodeNode} from '@lexical/code';
 import {$convertToMarkdownString, $convertFromMarkdownString, TRANSFORMERS} from '@lexical/markdown';
 import {$createParagraphNode, $getSelection, $isRangeSelection, EditorState, FORMAT_TEXT_COMMAND} from 'lexical';
+import {ImageNode, IMAGE_TRANSFORMER, $createImageNode} from './ImageNode';
 import {$setBlocksType} from '@lexical/selection';
 import {mergeRegister} from '@lexical/utils';
+
+// IMAGE_TRANSFORMER must come before TRANSFORMERS so it takes precedence over the LINK transformer
+const ALL_TRANSFORMERS = [IMAGE_TRANSFORMER, ...TRANSFORMERS];
 
 interface EditorProps {
     initialContent?: string;
     onChange?: (content: string) => void;
     placeholder?: string;
     fontSize?: number;
+    onImageQueued?: (blobUrl: string, file: File) => void;
 }
 
 const theme = {
@@ -95,11 +100,13 @@ function Placeholder({text}: { text: string }) {
 function ToolbarButton({
                            onClick,
                            isActive,
+                           disabled,
                            children,
                            title,
                        }: {
     onClick: () => void;
     isActive?: boolean;
+    disabled?: boolean;
     children: React.ReactNode;
     title: string;
 }) {
@@ -108,10 +115,13 @@ function ToolbarButton({
             type="button"
             onClick={onClick}
             title={title}
-            className={`p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors ${
-                isActive
-                    ? 'bg-slate-200 dark:bg-slate-700 text-primary-600 dark:text-primary-400 transition-colors'
-                    : 'text-slate-600 dark:text-slate-400 transition-colors'
+            disabled={disabled}
+            className={`p-1.5 rounded transition-colors ${
+                disabled
+                    ? 'opacity-40 cursor-not-allowed text-slate-400 dark:text-slate-600'
+                    : isActive
+                        ? 'bg-slate-200 dark:bg-slate-700 text-primary-600 dark:text-primary-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
         >
             {children}
@@ -125,13 +135,14 @@ function ToolbarDivider() {
 }
 
 // Toolbar plugin
-function ToolbarPlugin() {
+function ToolbarPlugin({onImageQueued}: {onImageQueued?: (blobUrl: string, file: File) => void}) {
     const [editor] = useLexicalComposerContext();
     const [isBold, setIsBold] = useState(false);
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
     const [isStrikethrough, setIsStrikethrough] = useState(false);
     const [isCode, setIsCode] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const updateToolbar = useCallback(() => {
         const selection = $getSelection();
@@ -180,6 +191,20 @@ function ToolbarPlugin() {
             }
         });
     };
+
+    const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        const blobUrl = URL.createObjectURL(file);
+        onImageQueued?.(blobUrl, file);
+        editor.update(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+                selection.insertNodes([$createImageNode(blobUrl, file.name)]);
+            }
+        });
+    }, [editor, onImageQueued]);
 
     return (
         <div
@@ -283,6 +308,26 @@ function ToolbarPlugin() {
                     <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
                 </svg>
             </ToolbarButton>
+
+            <ToolbarDivider/>
+
+            {/* Image upload */}
+            <ToolbarButton
+                onClick={() => fileInputRef.current?.click()}
+                title="Insert Image"
+            >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </ToolbarButton>
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                className="hidden"
+                onChange={handleImageUpload}
+            />
         </div>
     );
 }
@@ -317,6 +362,7 @@ export function Editor({
                            onChange,
                            placeholder = 'Start writing...',
                            fontSize = 16,
+                           onImageQueued,
                        }: EditorProps) {
     const initialConfig = {
         namespace: 'CadernoEditor',
@@ -325,7 +371,7 @@ export function Editor({
             console.error('Lexical error:', error);
         },
         editorState: () => {
-            $convertFromMarkdownString(initialContent || '', TRANSFORMERS);
+            $convertFromMarkdownString(initialContent || '', ALL_TRANSFORMERS);
         },
         nodes: [
             HeadingNode,
@@ -336,6 +382,7 @@ export function Editor({
             AutoLinkNode,
             CodeNode,
             CodeHighlightNode,
+            ImageNode,
         ],
     };
 
@@ -343,7 +390,7 @@ export function Editor({
         (editorState: EditorState) => {
             if (onChange) {
                 editorState.read(() => {
-                    const content = $convertToMarkdownString(TRANSFORMERS);
+                    const content = $convertToMarkdownString(ALL_TRANSFORMERS);
                     onChange(content);
                 });
             }
@@ -355,7 +402,7 @@ export function Editor({
         <LexicalComposer initialConfig={initialConfig}>
             <div
                 className="editor-container relative rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 transition-colors">
-                <ToolbarPlugin/>
+                <ToolbarPlugin onImageQueued={onImageQueued}/>
                 <RichTextPlugin
                     contentEditable={
                         <ContentEditable
@@ -369,7 +416,7 @@ export function Editor({
                 <HistoryPlugin/>
                 <ListPlugin/>
                 <LinkPlugin/>
-                <MarkdownShortcutPlugin transformers={TRANSFORMERS}/>
+                <MarkdownShortcutPlugin transformers={ALL_TRANSFORMERS}/>
                 <OnChangePlugin onChange={handleChange}/>
             </div>
         </LexicalComposer>

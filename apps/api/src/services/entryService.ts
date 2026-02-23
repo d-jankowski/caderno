@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { Entry, IEntry } from '../models/Entry.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { reconcileEntryImages } from './imageService.js';
 import type {
   CreateEntryInput,
   UpdateEntryInput,
@@ -74,6 +75,10 @@ export async function updateEntry(
 
   if (!entry) {
     throw new AppError(404, 'ENTRY_NOT_FOUND', 'Entry not found');
+  }
+
+  if (input.content !== undefined) {
+    await reconcileEntryImages(entryId, input.content);
   }
 
   return toEntryResponse(entry);
