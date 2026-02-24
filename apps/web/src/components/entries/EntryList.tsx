@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEntriesStore } from '../../stores';
-import { EntryCard } from './EntryCard';
+import { EntryPresentation } from './EntryPresentation';
 import { Button } from '../ui';
 
 export function EntryList() {
@@ -74,9 +74,9 @@ export function EntryList() {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-col gap-4">
         {entries.map((entry) => (
-          <EntryCard key={entry.id} entry={entry} />
+          <EntryPresentation key={entry.id} entry={entry} preview />
         ))}
       </div>
 
