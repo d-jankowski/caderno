@@ -7,6 +7,7 @@
     "remove": "Remover",
     "search": "Buscar",
     "back": "Voltar",
+    "edit": "Editar",
     "continue": "Continuar",
     "previous": "Anterior",
     "next": "Próximo",
@@ -67,7 +68,8 @@
     "locationName": "Nome do local",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "locationSet": "Localização definida"
+    "locationSet": "Localização definida",
+    "updatedAt": "Atualizado {{date}}"
   },
   "safetyTimer": {
     "title": "Timer de Segurança",

@@ -7,6 +7,7 @@
     "remove": "Remove",
     "search": "Search",
     "back": "Back",
+    "edit": "Edit",
     "continue": "Continue",
     "previous": "Previous",
     "next": "Next",
@@ -67,7 +68,8 @@
     "locationName": "Location name",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "locationSet": "Location set"
+    "locationSet": "Location set",
+    "updatedAt": "Updated {{date}}"
   },
   "safetyTimer": {
     "title": "Safety Timer",

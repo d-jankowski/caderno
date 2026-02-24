@@ -27,7 +27,7 @@ export function EntryCard({ entry }: EntryCardProps) {
   };
 
   return (
-    <Link to={`/entries/${entry.id}`}>
+    <Link to={`/entries/${entry.id}/view`}>
       <Card className="transition-shadow hover:shadow-md">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">

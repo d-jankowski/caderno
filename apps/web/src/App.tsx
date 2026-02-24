@@ -7,6 +7,7 @@ import {
   RegisterPage,
   EntriesPage,
   EntryEditPage,
+  EntryViewPage,
   SafetyTimerPage,
   SettingsPage,
   MagicLinkVerifyPage,
@@ -100,7 +101,23 @@ function AppRoutes() {
           }
         />
         <Route
-          path="entries/:id"
+          path="entries/new"
+          element={
+            <ProtectedRoute>
+              <EntryEditPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="entries/:id/view"
+          element={
+            <ProtectedRoute>
+              <EntryViewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="entries/:id/edit"
           element={
             <ProtectedRoute>
               <EntryEditPage />

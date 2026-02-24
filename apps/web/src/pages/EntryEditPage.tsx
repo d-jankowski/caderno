@@ -23,7 +23,7 @@ export function EntryEditPage() {
     clearError,
   } = useEntriesStore();
 
-  const isNew = id === 'new';
+  const isNew = !id;
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -50,18 +50,24 @@ export function EntryEditPage() {
   }, []);
 
   useEffect(() => {
-    if (!isNew && id) {
+    if (id) {
       fetchEntry(id);
+    } else {
+      setTitle('');
+      setContent('');
+      setTags([]);
+      setLocation(null);
+      setIncludeInSafetyTimer(true);
     }
 
     return () => {
       clearCurrentEntry();
       clearError();
     };
-  }, [id, isNew, fetchEntry, clearCurrentEntry, clearError]);
+  }, [id, fetchEntry, clearCurrentEntry, clearError]);
 
   useEffect(() => {
-    if (currentEntry && !isNew) {
+    if (currentEntry) {
       setTitle(currentEntry.title);
       setContent(currentEntry.content);
       setTags(currentEntry.tags);
@@ -74,7 +80,7 @@ export function EntryEditPage() {
         });
       }
     }
-  }, [currentEntry, isNew]);
+  }, [currentEntry]);
 
   const handleEditorChange = useCallback(
     (newContent: string) => {
@@ -143,7 +149,7 @@ export function EntryEditPage() {
           locationLongitude: location?.longitude,
           locationName: location?.locationName,
         });
-        navigate(`/entries/${entry.id}`, { replace: true });
+        navigate(`/entries/${entry.id}/view`, { replace: true });
       } else if (id) {
         const finalContent = await uploadPendingImages(id, content);
         await updateEntry(id, {
@@ -155,6 +161,7 @@ export function EntryEditPage() {
           locationLongitude: location?.longitude,
           locationName: location?.locationName,
         });
+        navigate(`/entries/${id}/view`);
       }
     } catch {
       // Error handled by store
@@ -189,7 +196,7 @@ export function EntryEditPage() {
           {isNew ? t('entries.newEntry') : t('entries.editEntry')}
         </h1>
         <div className="flex gap-2">
-          <Button variant="ghost" onClick={() => navigate('/entries')}>
+          <Button variant="ghost" onClick={() => navigate(isNew ? '/entries' : `/entries/${id}/view`)}>
             {t('common.cancel')}
           </Button>
           {!isNew && (
@@ -218,7 +225,7 @@ export function EntryEditPage() {
 
         {(isNew || currentEntry) && (
           <Editor
-            key={id}
+            key={id ?? 'new'}
             initialContent={isNew ? undefined : currentEntry?.content}
             onChange={handleEditorChange}
             placeholder={t('entries.contentPlaceholder')}
