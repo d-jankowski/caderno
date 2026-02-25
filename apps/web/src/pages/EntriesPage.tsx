@@ -32,7 +32,7 @@ export function EntriesPage() {
           <button
             type="button"
             onClick={() => setSidebarOpen((prev) => !prev)}
-            className="rounded p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            className="rounded-sm p-1.5 text-ink-400 transition-colors hover:bg-paper-200 hover:text-ink"
             aria-label={sidebarOpen ? t('common.closeSidebar') : t('common.openSidebar')}
           >
             <SidebarToggleIcon />

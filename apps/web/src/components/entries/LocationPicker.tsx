@@ -120,9 +120,9 @@ export function LocationPicker({ initialLocation, onSave, onCancel }: LocationPi
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-lg rounded-lg bg-white dark:bg-slate-900 shadow-xl transition-colors">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 transition-colors">
+      <div className="w-full max-w-lg rounded border border-paper-300 bg-paper-50 shadow-sm">
+        <div className="p-4 border-b border-paper-300">
+          <h2 className="text-base font-semibold text-ink">
             {t('entries.setLocation')}
           </h2>
         </div>
@@ -130,7 +130,7 @@ export function LocationPicker({ initialLocation, onSave, onCancel }: LocationPi
         <div className="p-4 space-y-3">
           <div className="flex gap-3">
             <div className="flex-1">
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 transition-colors">
+              <label className="block text-xs font-medium text-ink-500 mb-1">
                 {t('entries.latitude')}
               </label>
               <input
@@ -138,11 +138,11 @@ export function LocationPicker({ initialLocation, onSave, onCancel }: LocationPi
                 value={latInput}
                 onChange={(e) => handleLatChange(e.target.value)}
                 step="any"
-                className="w-full rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="input py-1.5 text-sm"
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 transition-colors">
+              <label className="block text-xs font-medium text-ink-500 mb-1">
                 {t('entries.longitude')}
               </label>
               <input
@@ -150,13 +150,13 @@ export function LocationPicker({ initialLocation, onSave, onCancel }: LocationPi
                 value={lngInput}
                 onChange={(e) => handleLngChange(e.target.value)}
                 step="any"
-                className="w-full rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="input py-1.5 text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 transition-colors">
+            <label className="block text-xs font-medium text-ink-500 mb-1">
               {t('entries.locationName')}
             </label>
             <div className="relative">
@@ -165,11 +165,11 @@ export function LocationPicker({ initialLocation, onSave, onCancel }: LocationPi
                 value={locationName}
                 onChange={(e) => setLocationName(e.target.value)}
                 maxLength={200}
-                className="w-full rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="input py-1.5 text-sm"
               />
               {isGeocoding && (
                 <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-                  <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />
+                  <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-paper-400 border-t-transparent" />
                 </div>
               )}
             </div>
@@ -193,7 +193,7 @@ export function LocationPicker({ initialLocation, onSave, onCancel }: LocationPi
           )}
         </div>
 
-        <div className="flex justify-end gap-2 p-4 border-t border-slate-200 dark:border-slate-700">
+        <div className="flex justify-end gap-2 p-4 border-t border-paper-300">
           <Button variant="ghost" onClick={onCancel}>
             {t('common.cancel')}
           </Button>

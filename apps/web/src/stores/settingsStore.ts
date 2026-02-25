@@ -14,12 +14,12 @@ interface SettingsState {
 }
 
 const defaultPreferences: UserPreferences = {
-  theme: 'system',
+  theme: 'light',
   language: 'en',
   editorFontSize: 16,
 };
 
-export const useSettingsStore = create<SettingsState>((set, get) => ({
+export const useSettingsStore = create<SettingsState>((set) => ({
   preferences: defaultPreferences,
   isLoading: false,
   error: null,
@@ -28,10 +28,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const { preferences } = await api.getPreferences();
-      set({ preferences, isLoading: false });
-
-      // Apply theme
-      get().setTheme(preferences.theme);
+      set({ preferences: { ...preferences, theme: 'light' }, isLoading: false });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to fetch preferences',
@@ -43,13 +40,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   updatePreferences: async (data) => {
     set({ isLoading: true, error: null });
     try {
-      const { preferences } = await api.updatePreferences(data);
-      set({ preferences, isLoading: false });
-
-      // Apply theme if changed
-      if (data.theme) {
-        get().setTheme(data.theme);
-      }
+      const { preferences } = await api.updatePreferences({ ...data, theme: 'light' });
+      set({ preferences: { ...preferences, theme: 'light' }, isLoading: false });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to update preferences',
@@ -59,24 +51,11 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     }
   },
 
-  setTheme: (theme) => {
-    // Update preferences state
+  setTheme: (_theme) => {
+    // Theme is always light — dark mode is not supported
     set((state) => ({
-      preferences: { ...state.preferences, theme },
+      preferences: { ...state.preferences, theme: 'light' },
     }));
-
-    // Apply theme to DOM
-    const root = document.documentElement;
-
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else if (theme === 'light') {
-      root.classList.remove('dark');
-    } else {
-      // System preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.classList.toggle('dark', prefersDark);
-    }
   },
 
   setLanguage: (language) => {
@@ -87,16 +66,3 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 }));
-
-// Initialize theme from system preference on load
-if (typeof window !== 'undefined') {
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-  document.documentElement.classList.toggle('dark', prefersDark.matches);
-
-  prefersDark.addEventListener('change', (e) => {
-    const { preferences } = useSettingsStore.getState();
-    if (preferences.theme === 'system') {
-      document.documentElement.classList.toggle('dark', e.matches);
-    }
-  });
-}

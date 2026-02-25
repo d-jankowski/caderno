@@ -24,7 +24,6 @@ export function OrbitalBackground({ className = '' }: OrbitalBackgroundProps) {
     let width = 0;
     let height = 0;
     let mouse = { x: 0, y: 0, active: false };
-    let isDark = document.documentElement.classList.contains('dark');
     let animationId: number;
 
     interface Particle {
@@ -104,8 +103,8 @@ export function OrbitalBackground({ className = '' }: OrbitalBackgroundProps) {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      const particleColor = isDark ? '79, 70, 229' : '79, 70, 229';
-      const lineColor = isDark ? '79, 70, 229' : '79, 70, 229';
+      const particleColor = '124, 86, 56'; // primary-600 sepia brown
+      const lineColor = particleColor;
 
       // Draw connections
       ctx.lineWidth = 0.5;
@@ -184,12 +183,6 @@ export function OrbitalBackground({ className = '' }: OrbitalBackgroundProps) {
       }
     };
 
-    // Theme observer
-    const observer = new MutationObserver(() => {
-      isDark = document.documentElement.classList.contains('dark');
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
     resize();
     window.addEventListener('resize', resize);
     canvas.addEventListener('mousemove', handleMouseMove);
@@ -203,7 +196,6 @@ export function OrbitalBackground({ className = '' }: OrbitalBackgroundProps) {
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
       canvas.removeEventListener('click', handleClick);
-      observer.disconnect();
     };
   }, []);
 

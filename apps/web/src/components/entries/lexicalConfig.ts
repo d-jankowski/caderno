@@ -34,8 +34,8 @@ export const lexicalTheme = {
     ol: 'list-decimal ml-6 mb-2',
     listitem: 'mb-1',
   },
-  quote: 'border-l-4 border-slate-300 pl-4 italic text-slate-600 dark:border-slate-600 dark:text-slate-400 mb-2 transition-colors',
-  code: 'bg-slate-100 dark:bg-slate-800 rounded px-1 py-0.5 font-mono text-sm transition-colors',
+  quote: 'border-l-4 border-paper-300 pl-4 italic text-ink-500 mb-2',
+  code: 'bg-paper-200 rounded-sm px-1 py-0.5 font-mono text-sm',
   codeHighlight: {
     atrule: 'text-blue-500',
     attr: 'text-blue-500',
@@ -68,12 +68,12 @@ export const lexicalTheme = {
     url: 'text-blue-500',
     variable: 'text-red-500',
   },
-  link: 'text-primary-600 hover:text-primary-700 underline dark:text-primary-400 transition-colors',
+  link: 'text-primary-600 hover:text-primary-700 underline transition-colors',
   text: {
     bold: 'font-bold',
     italic: 'italic',
     strikethrough: 'line-through',
     underline: 'underline',
-    code: 'bg-slate-100 dark:bg-slate-800 rounded px-1 py-0.5 font-mono text-sm transition-colors',
+    code: 'bg-paper-200 rounded-sm px-1 py-0.5 font-mono text-sm',
   },
 };

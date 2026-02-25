@@ -28,17 +28,17 @@ export function EntryCard({ entry }: EntryCardProps) {
 
   return (
     <Link to={`/entries/${entry.id}/view`}>
-      <Card className="transition-shadow hover:shadow-md">
+      <Card className="hover:border-paper-400 transition-colors">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-slate-900 dark:text-slate-100 truncate transition-colors">
+            <h3 className="font-medium text-ink truncate">
               {entry.title}
             </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 line-clamp-2 transition-colors">
+            <p className="mt-1 text-sm text-ink-500 line-clamp-2">
               {truncateText(entry.content, 150)}
             </p>
           </div>
-          <time className="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap transition-colors">
+          <time className="text-xs text-ink-400 whitespace-nowrap">
             {formatDate(entry.createdAt)}
           </time>
         </div>
@@ -48,7 +48,7 @@ export function EntryCard({ entry }: EntryCardProps) {
             {entry.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 transition-colors"
+                className="inline-flex items-center rounded-sm bg-paper-200 px-2 py-0.5 text-xs font-medium text-ink-600"
               >
                 {tag}
               </span>
@@ -57,7 +57,7 @@ export function EntryCard({ entry }: EntryCardProps) {
         )}
 
         {entry.includeInSafetyTimer && (
-          <div className="mt-2 flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 transition-colors">
+          <div className="mt-2 flex items-center gap-1 text-xs text-ink-400">
             <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -70,7 +70,7 @@ export function EntryCard({ entry }: EntryCardProps) {
         )}
 
         {entry.locationName && (
-          <div className="mt-1 flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 transition-colors">
+          <div className="mt-1 flex items-center gap-1 text-xs text-ink-400">
             <svg className="h-3 w-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>

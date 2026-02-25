@@ -192,9 +192,10 @@ export function EntryEditPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 transition-colors">
+        <h1 className="text-2xl font-semibold text-ink">
           {isNew ? t('entries.newEntry') : t('entries.editEntry')}
         </h1>
+
         <div className="flex gap-2">
           <Button variant="ghost" onClick={() => navigate(isNew ? '/entries' : `/entries/${id}/view`)}>
             {t('common.cancel')}
@@ -236,7 +237,7 @@ export function EntryEditPage() {
         )}
 
         {location && (
-          <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 transition-colors">
+          <div className="flex items-center gap-1.5 text-sm text-ink-500">
             <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -248,7 +249,7 @@ export function EntryEditPage() {
             </span>
             <button
               onClick={() => setLocation(null)}
-              className="ml-1 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              className="ml-1 text-ink-400 hover:text-ink transition-colors"
               aria-label="Remove location"
             >
               &times;
@@ -262,12 +263,12 @@ export function EntryEditPage() {
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-3 py-1 text-sm text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 transition-colors"
+                className="inline-flex items-center gap-1 rounded-sm bg-paper-200 px-3 py-1 text-sm text-ink-600"
               >
                 {tag}
                 <button
                   onClick={() => handleRemoveTag(tag)}
-                  className="ml-1 hover:text-primary-900 dark:hover:text-primary-100 transition-colors"
+                  className="ml-1 text-ink-400 hover:text-ink transition-colors"
                 >
                   &times;
                 </button>
@@ -298,9 +299,9 @@ export function EntryEditPage() {
             type="checkbox"
             checked={includeInSafetyTimer}
             onChange={(e) => setIncludeInSafetyTimer(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+            className="h-4 w-4 rounded border-paper-300 text-primary-600 focus:ring-primary-600/40"
           />
-          <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors">
+          <span className="text-sm text-ink-600">
             {t('entries.includeInSafetyTimer')}
           </span>
         </label>
@@ -317,11 +318,11 @@ export function EntryEditPage() {
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-sm rounded-lg bg-white p-6 dark:bg-slate-900 transition-colors">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 transition-colors">
+          <div className="w-full max-w-sm rounded border border-paper-300 bg-paper-50 p-6">
+            <h3 className="text-base font-semibold text-ink">
               {t('entries.deleteConfirm')}
             </h3>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 transition-colors">
+            <p className="mt-2 text-sm text-ink-500">
               {t('entries.deleteWarning')}
             </p>
             <div className="mt-4 flex justify-end gap-2">

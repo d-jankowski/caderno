@@ -182,8 +182,8 @@ export function OnboardingPage() {
                 onClick={() => handleLanguageSelect(lang.code as 'en' | 'es' | 'pt-BR')}
                 className={`rounded-lg border p-3 text-left transition-colors ${
                   language === lang.code
-                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 transition-colors'
-                    : 'border-slate-200 hover:border-primary-300 dark:border-slate-700 transition-colors'
+                    ? 'border-primary-600 bg-primary-100'
+                    : 'border-paper-300 hover:border-primary-400'
                 }`}
               >
                 {lang.name}
@@ -238,7 +238,7 @@ export function OnboardingPage() {
                 className={`h-1 flex-1 rounded-full ${
                   index <= currentStep
                     ? 'bg-primary-600'
-                    : 'bg-slate-200 dark:bg-slate-700 transition-colors'
+                    : 'bg-paper-300'
                 }`}
               />
             ))}

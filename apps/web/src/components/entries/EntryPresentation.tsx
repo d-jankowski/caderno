@@ -45,7 +45,7 @@ function EntryMeta({ entry, t }: { entry: Entry; t: (key: string) => string }) {
           {entry.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 transition-colors"
+              className="inline-flex items-center rounded-sm bg-paper-200 px-2.5 py-0.5 text-xs font-medium text-ink-600"
             >
               {tag}
             </span>
@@ -54,7 +54,7 @@ function EntryMeta({ entry, t }: { entry: Entry; t: (key: string) => string }) {
       )}
 
       {entry.locationName && (
-        <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 transition-colors">
+        <div className="flex items-center gap-1.5 text-sm text-ink-500">
           <svg aria-hidden="true" className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -66,7 +66,7 @@ function EntryMeta({ entry, t }: { entry: Entry; t: (key: string) => string }) {
       )}
 
       {entry.includeInSafetyTimer && (
-        <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 transition-colors">
+        <div className="flex items-center gap-1.5 text-sm text-ink-500">
           <svg aria-hidden="true" className="h-4 w-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
@@ -103,7 +103,7 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
           <button
             type="button"
             onClick={() => navigate(`/entries/${entry.id}/view`)}
-            className="text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors text-left"
+            className="text-sm text-ink-400 hover:text-primary-600 transition-colors text-left"
           >
             <time dateTime={entry.createdAt}>{formatDate(entry.createdAt)}</time>
           </button>
@@ -111,7 +111,7 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
           <button
             type="button"
             onClick={() => navigate(`/entries/${entry.id}/edit`)}
-            className="rounded p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            className="rounded-sm p-1 text-ink-300 hover:text-ink-600 transition-colors"
             aria-label={t('common.edit')}
           >
             <PencilIcon />
@@ -119,7 +119,7 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
         </div>
 
         {/* Title */}
-        <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-100 transition-colors break-words">
+        <h2 className="mt-3 text-xl font-semibold text-ink break-words">
           {entry.title}
         </h2>
 
@@ -131,12 +131,12 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
             <>
               <div className="relative max-h-[52rem] overflow-hidden">
                 <MarkdownViewer key={entry.id} content={entry.content} />
-                <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-slate-900 to-transparent" />
+                <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-paper-100 to-transparent" />
               </div>
               <button
                 type="button"
                 onClick={() => setExpanded(true)}
-                className="mt-3 flex w-full items-center justify-center border-y border-slate-200 py-2 text-slate-400 hover:text-slate-600 dark:border-slate-700 dark:hover:text-slate-200 transition-colors"
+                className="mt-3 flex w-full items-center justify-center border-y border-paper-300 py-2 text-ink-300 hover:text-ink-500 transition-colors"
                 aria-label="Show more"
               >
                 <DotsIcon />
@@ -157,7 +157,7 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
       {/* Header: date (static) + pencil navigates to edit */}
       <div className="flex items-center justify-between">
         <time
-          className="text-sm text-slate-500 dark:text-slate-400 transition-colors"
+          className="text-sm text-ink-400"
           dateTime={entry.createdAt}
         >
           {formatDate(entry.createdAt)}
@@ -166,14 +166,14 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
         <button
           type="button"
           onClick={() => navigate(`/entries/${entry.id}/edit`)}
-          className="rounded p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+          className="rounded-sm p-1 text-ink-300 hover:text-ink-600 transition-colors"
           aria-label={t('common.edit')}
         >
           <PencilIcon />
         </button>
       </div>
 
-      <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 transition-colors break-words">
+      <h2 className="text-xl font-semibold text-ink break-words">
         {entry.title}
       </h2>
 

@@ -29,7 +29,7 @@ export function MarkdownViewer({content}: MarkdownViewerProps) {
     <LexicalComposer initialConfig={initialConfig}>
       <RichTextPlugin
         contentEditable={
-          <ContentEditable className="outline-none prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100" />
+          <ContentEditable className="outline-none prose max-w-none" />
         }
         placeholder={null}
         ErrorBoundary={LexicalErrorBoundary}

@@ -133,7 +133,7 @@ export function LoginPage() {
                 <button
                   type="button"
                   onClick={handleBackToEmail}
-                  className="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors pointer-events-auto"
+                  className="text-sm text-ink-500 hover:text-ink transition-colors pointer-events-auto"
                 >
                   &larr; {email}
                 </button>
@@ -165,10 +165,10 @@ export function LoginPage() {
                 {methods.password && (methods.magicLink || methods.passkey) && hasMultipleMethods && (
                   <div className="relative pointer-events-none">
                     <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-slate-300 dark:border-slate-600" />
+                      <div className="w-full border-t border-paper-300" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white/80 dark:bg-slate-800/80 px-2 text-slate-500 dark:text-slate-400">
+                      <span className="bg-paper-50/90 px-2 text-ink-400">
                         {t('auth.orDivider')}
                       </span>
                     </div>
@@ -209,7 +209,7 @@ export function LoginPage() {
               </div>
             )}
 
-            <div className="mt-4 text-center text-sm text-slate-600 dark:text-slate-400 transition-colors pointer-events-auto">
+            <div className="mt-4 text-center text-sm text-ink-500 pointer-events-auto">
               {t('auth.noAccount')}{' '}
               <Link to="/register" className="link">
                 {t('auth.register')}

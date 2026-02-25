@@ -129,10 +129,6 @@ export function SettingsPage() {
     }
   };
 
-  const handleThemeChange = async (theme: 'light' | 'dark' | 'system') => {
-    await updatePreferences({ theme });
-  };
-
   const handleLanguageChange = async (language: 'en' | 'es' | 'pt-BR') => {
     await updatePreferences({ language });
     i18n.changeLanguage(language);
@@ -144,7 +140,7 @@ export function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 transition-colors">
+      <h1 className="text-2xl font-semibold text-ink">
         {t('settings.title')}
       </h1>
 
@@ -163,17 +159,6 @@ export function SettingsPage() {
           <CardTitle>{t('settings.appearance')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Select
-            label={t('settings.theme')}
-            value={preferences.theme}
-            onChange={(e) => handleThemeChange(e.target.value as 'light' | 'dark' | 'system')}
-            options={[
-              { value: 'light', label: t('settings.themeLight') },
-              { value: 'dark', label: t('settings.themeDark') },
-              { value: 'system', label: t('settings.themeSystem') },
-            ]}
-          />
-
           <Select
             label={t('settings.language')}
             value={preferences.language}
@@ -196,7 +181,7 @@ export function SettingsPage() {
                 onChange={(e) => handleFontSizeChange(parseInt(e.target.value))}
                 className="flex-1"
               />
-              <span className="w-12 text-sm text-slate-600 dark:text-slate-400 transition-colors">
+              <span className="w-12 text-sm text-ink-500">
                 {preferences.editorFontSize}px
               </span>
             </div>
@@ -228,7 +213,7 @@ export function SettingsPage() {
               {t('settings.exportPdf')}
             </Button>
           </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors">
+          <p className="text-sm text-ink-400">
             {t('settings.exportDescription')}
           </p>
         </CardContent>
@@ -240,7 +225,7 @@ export function SettingsPage() {
           <CardTitle>{t('settings.emailConfiguration')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 transition-colors">
+          <p className="text-sm text-ink-500 mb-4">
             {t('settings.emailConfigDescription')}
           </p>
           {showSmtpForm ? (
@@ -295,7 +280,7 @@ export function SettingsPage() {
         title={t('settings.clearSmtpConfirmTitle')}
       >
         <div className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400 transition-colors">
+          <p className="text-sm text-ink-500">
             {t('settings.clearSmtpConfirmMessage')}
           </p>
           <div className="flex justify-end gap-2">
@@ -315,7 +300,7 @@ export function SettingsPage() {
           <CardTitle>{t('settings.passkeys')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 transition-colors">
+          <p className="text-sm text-ink-500 mb-4">
             {t('settings.passkeysDescription')}
           </p>
 
@@ -330,7 +315,7 @@ export function SettingsPage() {
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
             </div>
           ) : passkeys.length === 0 ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 transition-colors">
+            <p className="text-sm text-ink-400 mb-4">
               {t('settings.noPasskeys')}
             </p>
           ) : (
@@ -338,13 +323,13 @@ export function SettingsPage() {
               {passkeys.map((passkey) => (
                 <div
                   key={passkey.id}
-                  className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-3 transition-colors"
+                  className="flex items-center justify-between rounded-sm border border-paper-300 p-3"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-sm text-slate-900 dark:text-slate-100 transition-colors truncate">
+                    <p className="font-medium text-sm text-ink truncate">
                       {passkey.name}
                     </p>
-                    <div className="text-xs text-slate-500 dark:text-slate-400 space-y-0.5 transition-colors">
+                    <div className="text-xs text-ink-400 space-y-0.5">
                       <p>{t('settings.passkeyDeviceType')}: {passkey.deviceType}</p>
                       <p>{t('settings.passkeyCreated')}: {new Date(passkey.createdAt).toLocaleDateString()}</p>
                       <p>
@@ -399,7 +384,7 @@ export function SettingsPage() {
         title={t('settings.deletePasskeyConfirm')}
       >
         <div className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400 transition-colors">
+          <p className="text-sm text-ink-500">
             {t('settings.deletePasskeyWarning')}
           </p>
           <div className="flex justify-end gap-2">
@@ -419,7 +404,7 @@ export function SettingsPage() {
           <CardTitle>{t('settings.about')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400 transition-colors">
+          <div className="space-y-2 text-sm text-ink-500">
             <p>
               <strong>Caderno</strong> - {t('settings.aboutDescription')}
             </p>

@@ -25,7 +25,7 @@ interface EditorProps {
 
 function Placeholder({text}: { text: string }) {
     return (
-        <div className="editor-placeholder text-slate-400 dark:text-slate-500 transition-colors">
+        <div className="editor-placeholder text-ink-400">
             {text}
         </div>
     );
@@ -51,12 +51,12 @@ function ToolbarPlugin({onImageQueued, onLocationClick}: {onImageQueued?: (blobU
     }, [editor, onImageQueued]);
 
     return (
-        <div className="flex items-center gap-0.5 p-2 border-b border-slate-200 dark:border-slate-700 transition-colors">
+        <div className="flex items-center gap-0.5 p-2 border-b border-paper-300">
             <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 title="Insert Image"
-                className="p-1.5 rounded transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                className="p-1.5 rounded-sm transition-colors text-ink-500 hover:bg-paper-200 hover:text-ink"
             >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -74,7 +74,7 @@ function ToolbarPlugin({onImageQueued, onLocationClick}: {onImageQueued?: (blobU
                 type="button"
                 onClick={() => onLocationClick?.()}
                 title="Set Location"
-                className="p-1.5 rounded transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                className="p-1.5 rounded-sm transition-colors text-ink-500 hover:bg-paper-200 hover:text-ink"
             >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -122,12 +122,12 @@ export function Editor({
     return (
         <LexicalComposer initialConfig={initialConfig}>
             <div
-                className="editor-container relative rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 transition-colors">
+                className="editor-container relative rounded border border-paper-300 bg-paper-100">
                 <ToolbarPlugin onImageQueued={onImageQueued} onLocationClick={onLocationClick}/>
                 <RichTextPlugin
                     contentEditable={
                         <ContentEditable
-                            className="editor-input min-h-[300px] p-4 outline-none prose prose-slate dark:prose-dark max-w-none"
+                            className="editor-input min-h-[300px] p-4 outline-none prose max-w-none"
                             style={{fontSize: `${fontSize}px`}}
                         />
                     }
