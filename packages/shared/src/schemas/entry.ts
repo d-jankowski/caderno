@@ -20,6 +20,7 @@ export const EntrySchema = z.object({
   content: z.string(),
   tags: z.array(z.string().max(50)).max(20).default([]),
   includeInSafetyTimer: z.boolean().default(true),
+  entryDate: z.date(),
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().optional(),
@@ -33,6 +34,7 @@ export const CreateEntrySchema = z.object({
   content: z.string(),
   tags: z.array(z.string().max(50)).max(20).optional(),
   includeInSafetyTimer: z.boolean().optional(),
+  entryDate: z.string().datetime().optional(),
   locationLatitude: z.number().optional(),
   locationLongitude: z.number().optional(),
   locationName: z.string().max(200).optional(),
@@ -43,6 +45,7 @@ export const UpdateEntrySchema = z.object({
   content: z.string(),
   tags: z.array(z.string().max(50)).max(20).optional(),
   includeInSafetyTimer: z.boolean().optional(),
+  entryDate: z.string().datetime().optional(),
   locationLatitude: z.number().optional(),
   locationLongitude: z.number().optional(),
   locationName: z.string().max(200).optional(),
@@ -59,7 +62,7 @@ export const EntryFilterSchema = z.object({
 export const PaginationSchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(20),
-  sortBy: z.enum(['createdAt', 'updatedAt', 'title']).default('createdAt'),
+  sortBy: z.enum(['entryDate', 'updatedAt', 'title']).default('entryDate'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 

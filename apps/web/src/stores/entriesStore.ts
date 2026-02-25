@@ -14,7 +14,7 @@ interface EntriesState {
   filters: {
     search: string;
     tags: string[];
-    sortBy: 'createdAt' | 'updatedAt' | 'title';
+    sortBy: 'entryDate' | 'updatedAt' | 'title';
     sortOrder: 'asc' | 'desc';
   };
 
@@ -41,7 +41,7 @@ export const useEntriesStore = create<EntriesState>((set, get) => ({
   filters: {
     search: '',
     tags: [],
-    sortBy: 'createdAt',
+    sortBy: 'entryDate',
     sortOrder: 'desc',
   },
 

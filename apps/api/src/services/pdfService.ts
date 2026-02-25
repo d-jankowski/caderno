@@ -43,7 +43,7 @@ export function generateJournalPdf(
 
     doc.fontSize(10).font('Helvetica');
     entries.forEach((entry, index) => {
-      const date = entry.createdAt.toLocaleDateString();
+      const date = entry.entryDate.toLocaleDateString();
       doc.text(`${index + 1}. ${entry.title} (${date})`);
     });
 
@@ -63,7 +63,7 @@ export function generateJournalPdf(
       // Metadata
       if (options.includeMetadata) {
         doc.fontSize(10).font('Helvetica').fillColor('#666666');
-        doc.text(`Created: ${entry.createdAt.toLocaleString()}`);
+        doc.text(`Created: ${entry.entryDate.toLocaleString()}`);
         if (entry.tags.length > 0) {
           doc.text(`Tags: ${entry.tags.join(', ')}`);
         }

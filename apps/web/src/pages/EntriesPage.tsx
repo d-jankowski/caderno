@@ -18,8 +18,8 @@ export function EntriesPage() {
 
   // Always sort by creation date
   useEffect(() => {
-    if (filters.sortBy !== 'createdAt') {
-      setFilters({ sortBy: 'createdAt' });
+    if (filters.sortBy !== 'entryDate') {
+      setFilters({ sortBy: 'entryDate' });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

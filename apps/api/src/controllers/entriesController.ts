@@ -80,7 +80,7 @@ export async function list(
     const pagination = {
       page: parseInt(req.query.page as string) || 1,
       limit: parseInt(req.query.limit as string) || 20,
-      sortBy: (req.query.sortBy as 'createdAt' | 'updatedAt' | 'title') || 'createdAt',
+      sortBy: (req.query.sortBy as 'entryDate' | 'updatedAt' | 'title') || 'entryDate',
       sortOrder: (req.query.sortOrder as 'asc' | 'desc') || 'desc',
     };
 

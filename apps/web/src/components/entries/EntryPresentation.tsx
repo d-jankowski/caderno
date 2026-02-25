@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Entry } from '../../lib/api';
+import { useEntriesStore } from '../../stores';
 import { MarkdownViewer } from './MarkdownViewer';
 
 const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -90,10 +91,47 @@ interface EntryPresentationProps {
   preview?: boolean;
 }
 
+function toInputDate(isoString: string): string {
+  const d = new Date(isoString);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export function EntryPresentation({ entry, preview = false }: EntryPresentationProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { updateEntry } = useEntriesStore();
   const [expanded, setExpanded] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [pendingDate, setPendingDate] = useState('');
+  const [isSavingDate, setIsSavingDate] = useState(false);
+
+  const handleDateClick = () => {
+    setPendingDate(toInputDate(entry.entryDate));
+    setShowDatePicker(true);
+  };
+
+  const handleDateSave = async () => {
+    if (!pendingDate) return;
+    setIsSavingDate(true);
+    try {
+      const original = new Date(entry.entryDate);
+      const [year, month, day] = pendingDate.split('-').map(Number);
+      const newDate = new Date(original);
+      newDate.setFullYear(year, month - 1, day);
+      await updateEntry(entry.id, {
+        content: entry.content,
+        entryDate: newDate.toISOString(),
+      });
+      setShowDatePicker(false);
+    } catch {
+      // error handled by store
+    } finally {
+      setIsSavingDate(false);
+    }
+  };
 
   if (preview) {
     return (
@@ -105,7 +143,7 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
             onClick={() => navigate(`/entries/${entry.id}/view`)}
             className="text-sm text-ink-400 hover:text-primary-600 transition-colors text-left"
           >
-            <time dateTime={entry.createdAt}>{formatDate(entry.createdAt)}</time>
+            <time dateTime={entry.entryDate}>{formatDate(entry.entryDate)}</time>
           </button>
 
           <button
@@ -154,14 +192,52 @@ export function EntryPresentation({ entry, preview = false }: EntryPresentationP
   /* ── Full / view-page mode ── */
   return (
     <div className="card space-y-4">
-      {/* Header: date (static) + pencil navigates to edit */}
+      {/* Header: clickable date + pencil navigates to edit */}
       <div className="flex items-center justify-between">
-        <time
-          className="text-sm text-ink-400"
-          dateTime={entry.createdAt}
-        >
-          {formatDate(entry.createdAt)}
-        </time>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={handleDateClick}
+            className="text-sm text-ink-400 hover:text-primary-600 transition-colors"
+          >
+            <time dateTime={entry.entryDate}>{formatDate(entry.entryDate)}</time>
+          </button>
+
+          {showDatePicker && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setShowDatePicker(false)}
+              />
+              <div className="absolute top-full left-0 z-20 mt-1.5 rounded border border-paper-300 bg-paper-50 p-3 shadow-sm space-y-3 min-w-[200px]">
+                <input
+                  type="date"
+                  className="input w-full"
+                  value={pendingDate}
+                  onChange={(e) => setPendingDate(e.target.value)}
+                  autoFocus
+                />
+                <div className="flex gap-2 justify-end">
+                  <button
+                    type="button"
+                    className="btn-secondary btn-sm"
+                    onClick={() => setShowDatePicker(false)}
+                  >
+                    {t('common.cancel')}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-primary btn-sm"
+                    onClick={handleDateSave}
+                    disabled={isSavingDate || !pendingDate}
+                  >
+                    {t('common.save')}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
 
         <button
           type="button"

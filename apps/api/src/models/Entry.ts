@@ -7,6 +7,7 @@ export interface IEntry extends Document {
     content: string;
     tags: string[];
     includeInSafetyTimer: boolean;
+    entryDate: Date;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
@@ -22,6 +23,7 @@ const EntrySchema = new Schema<IEntry>(
         content: {type: String, required: true},
         tags: [{type: String, maxlength: 50}],
         includeInSafetyTimer: {type: Boolean, default: true},
+        entryDate: {type: Date, default: Date.now},
         deletedAt: {type: Date},
         locationLatitude: {type: Number},
         locationLongitude: {type: Number},

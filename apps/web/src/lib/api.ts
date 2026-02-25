@@ -478,7 +478,7 @@ interface Entry {
   content: string;
   tags: string[];
   includeInSafetyTimer: boolean;
-  createdAt: string;
+  entryDate: string;
   updatedAt: string;
   deletedAt?: string;
   locationLatitude?: number;
@@ -501,6 +501,7 @@ interface UpdateEntryInput {
   content?: string;
   tags?: string[];
   includeInSafetyTimer?: boolean;
+  entryDate?: string;
   locationLatitude?: number;
   locationLongitude?: number;
   locationName?: string;

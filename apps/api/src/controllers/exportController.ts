@@ -27,7 +27,7 @@ export async function exportJson(
         content: e.content,
         tags: e.tags,
         includeInSafetyTimer: e.includeInSafetyTimer,
-        createdAt: e.createdAt,
+        entryDate: e.entryDate,
         updatedAt: e.updatedAt,
         deletedAt: e.deletedAt,
       })),
@@ -119,7 +119,7 @@ export async function importJson(
           content: entry.content,
           tags: entry.tags || [],
           includeInSafetyTimer: entry.includeInSafetyTimer ?? true,
-          createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(),
+          entryDate: entry.entryDate ? new Date(entry.entryDate) : new Date(),
           updatedAt: entry.updatedAt ? new Date(entry.updatedAt) : new Date(),
           deletedAt: entry.deletedAt ? new Date(entry.deletedAt) : undefined,
         });

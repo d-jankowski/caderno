@@ -16,7 +16,7 @@ export interface EntryResponse {
   content: string;
   tags: string[];
   includeInSafetyTimer: boolean;
-  createdAt: Date;
+  entryDate: Date;
   updatedAt: Date;
   deletedAt?: Date;
   locationLatitude?: number;
@@ -31,7 +31,7 @@ function toEntryResponse(entry: IEntry): EntryResponse {
     content: entry.content,
     tags: entry.tags,
     includeInSafetyTimer: entry.includeInSafetyTimer,
-    createdAt: entry.createdAt,
+    entryDate: entry.entryDate,
     updatedAt: entry.updatedAt,
     deletedAt: entry.deletedAt,
     locationLatitude: entry.locationLatitude,
@@ -50,6 +50,7 @@ export async function createEntry(
     content: input.content,
     tags: input.tags || [],
     includeInSafetyTimer: input.includeInSafetyTimer ?? true,
+    entryDate: input.entryDate ?? new Date(),
   });
 
   return toEntryResponse(entry);
@@ -135,12 +136,12 @@ export async function listEntries(
 
   // Date range filter
   if (filter.startDate || filter.endDate) {
-    query.createdAt = {};
+    query.entryDate = {};
     if (filter.startDate) {
-      (query.createdAt as Record<string, unknown>).$gte = new Date(filter.startDate);
+      (query.entryDate as Record<string, unknown>).$gte = new Date(filter.startDate);
     }
     if (filter.endDate) {
-      (query.createdAt as Record<string, unknown>).$lte = new Date(filter.endDate);
+      (query.entryDate as Record<string, unknown>).$lte = new Date(filter.endDate);
     }
   }
 
@@ -201,16 +202,16 @@ export async function getEntriesForExport(
   }
 
   if (options.startDate || options.endDate) {
-    query.createdAt = {};
+    query.entryDate = {};
     if (options.startDate) {
-      (query.createdAt as Record<string, unknown>).$gte = new Date(options.startDate);
+      (query.entryDate as Record<string, unknown>).$gte = new Date(options.startDate);
     }
     if (options.endDate) {
-      (query.createdAt as Record<string, unknown>).$lte = new Date(options.endDate);
+      (query.entryDate as Record<string, unknown>).$lte = new Date(options.endDate);
     }
   }
 
-  return Entry.find(query).sort({ createdAt: -1 });
+  return Entry.find(query).sort({ entryDate: -1 });
 }
 
 export async function getEntriesForSafetyTimer(
@@ -228,5 +229,5 @@ export async function getEntriesForSafetyTimer(
     query.tags = { $in: filterTags };
   }
 
-  return Entry.find(query).sort({ createdAt: -1 });
+  return Entry.find(query).sort({ entryDate: -1 });
 }

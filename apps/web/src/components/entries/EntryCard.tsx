@@ -39,7 +39,7 @@ export function EntryCard({ entry }: EntryCardProps) {
             </p>
           </div>
           <time className="text-xs text-ink-400 whitespace-nowrap">
-            {formatDate(entry.createdAt)}
+            {formatDate(entry.entryDate)}
           </time>
         </div>
 
